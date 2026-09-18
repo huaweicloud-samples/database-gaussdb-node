@@ -163,8 +163,9 @@ suite.testAsync('legacy gaussdbSha256PasswordHash: different iteration counts pr
     return data
   }
 
-  const hash1 = crypto.gaussdbSha256PasswordHash('user', 'pass', makeData(1000))
-  const hash2 = crypto.gaussdbSha256PasswordHash('user', 'pass', makeData(4096))
+  // 'server' mode: honor the iteration count carried in the auth message
+  const hash1 = crypto.gaussdbSha256PasswordHash('user', 'pass', makeData(1000), 'server')
+  const hash2 = crypto.gaussdbSha256PasswordHash('user', 'pass', makeData(4096), 'server')
   assert.notStrictEqual(hash1, hash2, 'different iterations should produce different hashes')
 })
 

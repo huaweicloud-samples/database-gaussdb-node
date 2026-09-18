@@ -13,6 +13,14 @@ module.exports = {
   // database user's password
   password: null,
 
+  // PBKDF2 iteration count used for GaussDB SHA256 (authType=10) authentication.
+  // Default 2048 matches the official JDBC driver behavior for protocol 3.0/3.50
+  // clients: GaussDB servers verify the proof with 2048 even when the auth message
+  // advertises a different count, so trusting the message breaks login (28P01).
+  // Set to 'server' to use the iteration count carried in the auth message instead
+  // (equivalent to JDBC protocol 3.51 behavior).
+  sha256Iterations: 2048,
+
   // a Postgres connection string to be used instead of setting individual connection items
   // NOTE:  Setting this value will cause it to override any other value (such as database or user) defined
   // in the defaults object.

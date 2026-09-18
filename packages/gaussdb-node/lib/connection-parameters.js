@@ -99,6 +99,16 @@ class ConnectionParameters {
 
     this.client_encoding = val('client_encoding', config)
     this.replication = val('replication', config)
+
+    // GaussDB SHA256 auth PBKDF2 iteration count: number or 'server'
+    const sha256Iterations = val('sha256Iterations', config)
+    if (sha256Iterations === 'server' || sha256Iterations === undefined) {
+      this.sha256Iterations = sha256Iterations
+    } else {
+      const parsed = parseInt(sha256Iterations, 10)
+      this.sha256Iterations = Number.isNaN(parsed) ? sha256Iterations : parsed
+    }
+
     // a domain socket begins with '/'
     this.isDomainSocket = !(this.host || '').indexOf('/')
 

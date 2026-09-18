@@ -56,14 +56,41 @@ async function gaussdbMd5PasswordHash(user, password, salt) {
   return 'md5' + outer
 }
 
-async function gaussdbSha256PasswordHash(user, password, data) {
-  // Constants for data structure parsing
-  const PASSWORD_METHOD_OFFSET = 0
-  const PASSWORD_METHOD_SIZE = 4
-  const RANDOM_CODE_SIZE = 64
-  const TOKEN_SIZE = 8
-  const ITERATION_SIZE = 4
+// Constants for data structure parsing
+const PASSWORD_METHOD_OFFSET = 0
+const PASSWORD_METHOD_SIZE = 4
+const RANDOM_CODE_SIZE = 64
+const TOKEN_SIZE = 8
+const ITERATION_SIZE = 4
 
+// Iteration-count resolution (JDBC compatibility), see utils-legacy.js:
+// the official JDBC driver hardcodes PBKDF2 iterations to 2048 for protocol
+// 3.0/3.50 clients and GaussDB servers verify with 2048 even when the auth
+// message advertises another count, so the default is 2048; pass 'server' to
+// use the count carried in the auth message instead.
+const JDBC_COMPAT_ITERATIONS = 2048
+// Same client-side bound as JDBC ConnectionFactoryImpl.MAX_ITERATIONS
+const MAX_ITERATIONS = 10000000
+
+function resolveSha256Iterations(dataBuffer, iterationOption) {
+  const serverIteration = dataBuffer.readInt32BE(dataBuffer.length - ITERATION_SIZE)
+  if (iterationOption === 'server') {
+    return serverIteration
+  }
+  const iterations =
+    typeof iterationOption === 'number' ? iterationOption : iterationOption === undefined ? JDBC_COMPAT_ITERATIONS : NaN
+  if (!Number.isInteger(iterations) || iterations < 1 || iterations > MAX_ITERATIONS) {
+    throw new RangeError(
+      'sha256Iterations must be an integer between 1 and ' +
+        MAX_ITERATIONS +
+        ", or 'server'; got " +
+        JSON.stringify(iterationOption)
+    )
+  }
+  return iterations
+}
+
+async function gaussdbSha256PasswordHash(user, password, data, iterationOption) {
   const dataBuffer = Buffer.from(data)
   // Password method is stored at the beginning but not used in this implementation
   // We ignore the stored method as we're using SHA256 here
@@ -76,11 +103,11 @@ async function gaussdbSha256PasswordHash(user, password, data) {
   const tokenOffset = PASSWORD_METHOD_SIZE + RANDOM_CODE_SIZE
   const token = dataBuffer.slice(tokenOffset, tokenOffset + TOKEN_SIZE).toString('ascii')
 
-  // Extract server iteration count from the last 4 bytes
-  const serverIteration = dataBuffer.readInt32BE(dataBuffer.length - ITERATION_SIZE)
+  // Resolve the PBKDF2 iteration count (default: JDBC-compatible 2048)
+  const iterations = resolveSha256Iterations(dataBuffer, iterationOption)
 
   // Generate the hash using RFC5802 algorithm
-  const hashResult = RFC5802Algorithm(password, randomCode, token, '', serverIteration, 'sha256')
+  const hashResult = RFC5802Algorithm(password, randomCode, token, '', iterations, 'sha256')
 
   return Buffer.from(hashResult, 'hex').toString('ascii')
 }

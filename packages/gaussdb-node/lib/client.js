@@ -397,7 +397,12 @@ class Client extends EventEmitter {
   _handleAuthSHA256Password(msg) {
     this._checkPgPass(async () => {
       try {
-        const hashedPassword = await crypto.gaussdbSha256PasswordHash(this.user, this.password, msg.data)
+        const hashedPassword = await crypto.gaussdbSha256PasswordHash(
+          this.user,
+          this.password,
+          msg.data,
+          this.connectionParameters.sha256Iterations
+        )
         this.connection.password(hashedPassword)
       } catch (e) {
         this.emit('error', e)
