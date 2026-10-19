@@ -1,28 +1,50 @@
 # gaussdb-node
 
-<!-- TODO: 打包后再恢复 -->
-<!-- ![Build Status](https://github.com/HuaweiCloudDeveloper/gaussdb-node/actions/workflows/ci.yml/badge.svg)
-<span class="badge-npmversion"><a href="https://npmjs.org/package/gaussdb" title="View this project on NPM"><img src="https://img.shields.io/npm/v/gaussdb.svg" alt="NPM version" /></a></span>
-<span class="badge-npmdownloads"><a href="https://npmjs.org/package/gaussdb" title="View this project on NPM"><img src="https://img.shields.io/npm/dm/gaussdb.svg" alt="NPM downloads" /></a></span> -->
-
 Non-blocking GaussDB client for Node.js.
 
 ## Monorepo
 
-This repo is a monorepo which contains the core [gaussdb-node](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-node) module as well as a handful of related modules.
+This repo is a monorepo which contains the core [gaussdb-node](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-node) module as well as a handful of related modules.
 
-- [gaussdb-node](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-node)
-- [gaussdb-pool](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-pool)
-- [gaussdb-cursor](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-cursor)
-- [gaussdb-query-stream](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-query-stream)
-- [gaussdb-connection-string](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-connection-string)
-- [gaussdb-protocol](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-protocol)
+- [gaussdb-node](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-node)
+- [gaussdb-pool](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-pool)
+- [gaussdb-cursor](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-cursor)
+- [gaussdb-query-stream](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-query-stream)
+- [gaussdb-connection-string](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-connection-string)
+- [gaussdb-protocol](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-protocol)
 
 ## Install
 
+### Published version 0.2.3
+
+The maintained npm package is [gaussdb-nodejs](https://www.npmjs.com/package/gaussdb-nodejs).
+Install it directly and import from `gaussdb-nodejs`:
+
+```sh
+npm install gaussdb-nodejs@0.2.3 --registry=https://registry.npmjs.org/
 ```
-npm install gaussdb-node
+
+To keep existing `require('gaussdb-node')` or `import ... from 'gaussdb-node'`
+code, install the same package using an npm alias:
+
+```sh
+npm install gaussdb-node@npm:gaussdb-nodejs@0.2.3 --registry=https://registry.npmjs.org/
 ```
+
+The old unscoped `gaussdb-node` package has not received this release.
+Do not use `npm install gaussdb-node@0.2.3` for this version.
+
+The companion packages are `gaussdb-nodejs-connection-string`,
+`gaussdb-nodejs-pool`, `gaussdb-nodejs-protocol`, `gaussdb-nodejs-cursor`,
+and `gaussdb-nodejs-query-stream`. The pool package is version 0.2.5;
+the other companion packages are version 0.2.3.
+`gaussdb-cloudflare` remains the existing optional package.
+
+Full database CI passes on Node.js 14, 15, 16, 18, 20, 22, 23 and 24.
+Package loading and SHA256 authentication calculation have additionally been
+checked on every major version from 14 through 26; this does not constitute
+full database integration testing on the additional versions.
+
 
 ## Documentation
 
@@ -32,7 +54,7 @@ Each package in this repo should have its own readme more focused on how to deve
 
 ### :star: Documentation:star:
 
-The source repo for the documentation is available for contribution [here](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/docs).
+The source repo for the documentation is available for contribution [here](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/docs).
 
 ### Features
 
@@ -47,11 +69,11 @@ The source repo for the documentation is available for contribution [here](https
 
 gaussdb-node is by design pretty light on abstractions. These are some handy modules we've been using over the years to complete the picture.
 <!-- TODO: 构建后恢复 -->
-<!-- The entire list can be found on our [wiki](https://github.com/HuaweiCloudDeveloper/gaussdb-node/wiki/Extras). -->
+<!-- The entire list can be found on our [wiki](https://github.com/huaweicloud-samples/database-gaussdb-node/wiki/Extras). -->
 
 ## Support
 
-gaussdb-node is free software. If you encounter a bug with the library please open an issue on the [GitHub repo](https://github.com/HuaweiCloudDeveloper/gaussdb-node). If you have questions unanswered by the documentation please open an issue pointing out how the documentation was unclear & I will do my best to make it better!
+gaussdb-node is free software. If you encounter a bug with the library please open an issue on the [GitHub repo](https://github.com/huaweicloud-samples/database-gaussdb-node). If you have questions unanswered by the documentation please open an issue pointing out how the documentation was unclear & I will do my best to make it better!
 
 When you open an issue please provide:
 

@@ -12,7 +12,7 @@ npm i --save-dev gaussdb-cloudflare
 
 ## How to use conditionally, in non-Node.js environments
 
-As implemented in `gaussdb` [here](https://github.com/HuaweiCloudDeveloper/gaussdb-node/commit/07553428e9c0eacf761a5d4541a3300ff7859578#diff-34588ad868ebcb232660aba7ee6a99d1e02f4bc93f73497d2688c3f074e60533R5-R13), a typical use case might look as follows, where in a Node.js environment the `net` module is used, while in a non-Node.js environment, where `net` is unavailable, `gaussdb-cloudflare` is used instead, providing an equivalent interface:
+As implemented in `gaussdb` [here](https://github.com/huaweicloud-samples/database-gaussdb-node/commit/07553428e9c0eacf761a5d4541a3300ff7859578#diff-34588ad868ebcb232660aba7ee6a99d1e02f4bc93f73497d2688c3f074e60533R5-R13), a typical use case might look as follows, where in a Node.js environment the `net` module is used, while in a non-Node.js environment, where `net` is unavailable, `gaussdb-cloudflare` is used instead, providing an equivalent interface:
 
 ```js
 module.exports.getStream = function getStream(ssl = false) {

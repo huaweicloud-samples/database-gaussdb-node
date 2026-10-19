@@ -6,9 +6,9 @@ Use a GaussDB result cursor from node with an easy to use API.
 ### install
 
 ```sh
-$ npm install gaussdb-cursor
+$ npm install gaussdb-node@npm:gaussdb-nodejs@0.2.3 gaussdb-cursor@npm:gaussdb-nodejs-cursor@0.2.3
 ```
-___note___: this depends on _either_ `npm install gaussdb-node` or `npm install gaussdb.js`, but you __must__ be using the pure JavaScript client.
+Use this package with the pure JavaScript `gaussdb-nodejs` client (installed as `gaussdb-node` by the alias above).
 
 ### :star: Documentation :star:
 
