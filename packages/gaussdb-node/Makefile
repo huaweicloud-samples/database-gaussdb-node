@@ -5,6 +5,9 @@ connectionString=gaussdb://
 params := $(connectionString)
 
 node-command := xargs -n 1 -I file node file $(params)
+ifdef CI
+node-command := xargs -n 1 -I file node ../../.github/ci/run-node-test.cjs file $(params)
+endif
 
 .PHONY : test test-connection test-integration bench \
 	 publish update-npm
