@@ -6,7 +6,7 @@ A connection pool for gaussdb-node
 
 ## install
 ```sh
-npm i gaussdb-pool@npm:gaussdb-nodejs-pool@0.2.3 gaussdb-node@npm:gaussdb-nodejs@0.2.3
+npm i gaussdb-pool@npm:gaussdb-nodejs-pool@0.2.5 gaussdb-node@npm:gaussdb-nodejs@0.2.3
 ```
 
 ## use

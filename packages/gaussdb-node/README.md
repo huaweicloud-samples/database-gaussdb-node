@@ -32,7 +32,8 @@ Do not use `npm install gaussdb-node@0.2.3` for this version.
 
 The companion packages are `gaussdb-nodejs-connection-string`,
 `gaussdb-nodejs-pool`, `gaussdb-nodejs-protocol`, `gaussdb-nodejs-cursor`,
-and `gaussdb-nodejs-query-stream`, all at version 0.2.3.
+and `gaussdb-nodejs-query-stream`. The pool package is version 0.2.5;
+the other companion packages are version 0.2.3.
 `gaussdb-cloudflare` remains the existing optional package.
 
 Full database CI passes on Node.js 14, 15, 16, 18, 20, 22, 23 and 24.

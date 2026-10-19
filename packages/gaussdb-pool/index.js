@@ -1,7 +1,7 @@
 'use strict'
 const EventEmitter = require('events').EventEmitter
-const ConnectionParameters = require('../gaussdb-node/lib/connection-parameters')
-const HostChooser = require('../gaussdb-node/lib/host-chooser')
+const ConnectionParameters = require('gaussdb-node/lib/connection-parameters.js')
+const HostChooser = require('gaussdb-node/lib/host-chooser.js')
 
 const NOOP = function () {}
 
