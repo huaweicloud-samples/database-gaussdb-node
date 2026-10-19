@@ -14,7 +14,7 @@
 
 安装 gaussdb-node 
 ```bash
-npm install gaussdb-node
+npm install gaussdb-node@npm:gaussdb-nodejs@0.2.3
 ```
 
 ## 环境变量配置

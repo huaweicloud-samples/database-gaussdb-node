@@ -139,7 +139,7 @@ await client.end()
 
 **client.query with a `Submittable`**
 
-If you pass an object to `client.query` and the object has a `.submit` function on it, the client will pass it's GaussDB server connection to the object and delegate query dispatching to the supplied object. This is an advanced feature mostly intended for library authors. It is incidentally also currently how the callback and promise based queries above are handled internally, but this is subject to change. It is also how [gaussdb-cursor](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-cursor) and [gaussdb-query-stream](https://github.com/HuaweiCloudDeveloper/gaussdb-node/tree/master/packages/gaussdb-query-stream) work.
+If you pass an object to `client.query` and the object has a `.submit` function on it, the client will pass it's GaussDB server connection to the object and delegate query dispatching to the supplied object. This is an advanced feature mostly intended for library authors. It is incidentally also currently how the callback and promise based queries above are handled internally, but this is subject to change. It is also how [gaussdb-cursor](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-cursor) and [gaussdb-query-stream](https://github.com/huaweicloud-samples/database-gaussdb-node/tree/master/packages/gaussdb-query-stream) work.
 
 ```js
 import { Query } from 'gaussdb-node'

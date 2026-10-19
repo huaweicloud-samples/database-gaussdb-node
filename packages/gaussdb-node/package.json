@@ -7,10 +7,10 @@
     "gaussdb",
     "rdbms"
   ],
-  "homepage": "https://github.com/HuaweiCloudDeveloper/gaussdb-node",
+  "homepage": "https://github.com/huaweicloud-samples/database-gaussdb-node",
   "repository": {
     "type": "git",
-    "url": "git@github.com:HuaweiCloudDeveloper/gaussdb-node.git",
+    "url": "https://github.com/huaweicloud-samples/database-gaussdb-node.git",
     "directory": "packages/gaussdb"
   },
   "author": "Brian Carlson <brian.m.carlson@gmail.com>",

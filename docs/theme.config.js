@@ -1,13 +1,13 @@
 // theme.config.js
 export default {
   project: {
-    link: 'https://github.com/HuaweiCloudDeveloper/gaussdb-node',
+    link: 'https://github.com/huaweicloud-samples/database-gaussdb-node',
   },
   twitter: {
     cardType: 'summary_large_image',
     site: 'https://gaussdb-node.com',
   },
-  docsRepositoryBase: 'https://github.com/HuaweiCloudDeveloper/gaussdb-node/blob/master/docs', // base URL for the docs repository
+  docsRepositoryBase: 'https://github.com/huaweicloud-samples/database-gaussdb-node/blob/master/docs', // base URL for the docs repository
   titleSuffix: ' – gaussdb-node',
   darkMode: true,
   navigation: {

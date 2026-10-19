@@ -3,7 +3,7 @@
   "description": "node gaussdb monorepo",
   "main": "index.js",
   "private": true,
-  "repository": "git@github.com:HuaweiCloudDeveloper/gaussdb-node.git",
+  "repository": "https://github.com/huaweicloud-samples/database-gaussdb-node.git",
   "author": "Brian M. Carlson <brian.m.carlson@gmail.com>",
   "license": "MIT",
   "workspaces": [

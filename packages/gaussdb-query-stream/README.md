@@ -1,15 +1,15 @@
 # gaussdb-query-stream
 
-Receive result rows from [gaussdb](https://github.com/HuaweiCloudDeveloper/gaussdb-node) as a readable (object) stream.
+Receive result rows from [gaussdb](https://github.com/huaweicloud-samples/database-gaussdb-node) as a readable (object) stream.
 
 ## installation
 
 ```bash
-$ npm install gaussdb-node --save
-$ npm install gaussdb-query-stream --save
+$ npm install gaussdb-node@npm:gaussdb-nodejs@0.2.3 --save
+$ npm install gaussdb-query-stream@npm:gaussdb-nodejs-query-stream@0.2.3 --save
 ```
 
-_requires gaussdb-node>=0.2.1_
+_Use with gaussdb-nodejs 0.2.3 or later._
 
 ## use
 
