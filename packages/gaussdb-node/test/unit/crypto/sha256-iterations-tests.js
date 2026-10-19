@@ -74,7 +74,7 @@ suite.testAsync('invalid iteration options are rejected', async () => {
       `expected RangeError for ${JSON.stringify(invalid)}`
     )
     await assert.rejects(
-      activeCrypto.gaussdbSha256PasswordHash('user', PASSWORD, buildAuthData(1000), invalid),
+      async () => activeCrypto.gaussdbSha256PasswordHash('user', PASSWORD, buildAuthData(1000), invalid),
       RangeError,
       `expected RangeError for ${JSON.stringify(invalid)}`
     )
