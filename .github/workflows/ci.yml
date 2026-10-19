@@ -82,6 +82,7 @@ jobs:
           cache: yarn
       - run: yarn install --frozen-lockfile
       - run: yarn build
+      - run: node .github/ci/prepare-tests.cjs
       - name: Setup test Node.js
         uses: actions/setup-node@v4
         with:
@@ -92,7 +93,9 @@ jobs:
             # node:test is unavailable here; exercise the same public imports
             # using an assert-based smoke test on the actual target runtime.
             node .github/ci/import-smoke.mjs
-            yarn lerna exec --ignore gaussdb-esm-test --concurrency 1 yarn test
+            yarn --cwd packages/gaussdb-connection-string nyc --include=index.js --reporter=lcov mocha --no-config 'dist/*.js'
+            yarn --cwd packages/gaussdb-connection-string check-coverage
+            yarn lerna exec --ignore gaussdb-esm-test --ignore gaussdb-connection-string --concurrency 1 yarn test
           else
             yarn test
           fi

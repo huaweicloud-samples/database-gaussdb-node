@@ -96,7 +96,8 @@ describe('serializer', () => {
         .addCString('')
         .addInt16(0)
         .addInt16(0)
-        .addInt16(0)
+        .addInt16(1) // one result-format code
+        .addInt16(0) // text results
         .join(true, 'B')
       assert.deepEqual(actual, expectedBuffer)
     })
@@ -123,7 +124,8 @@ describe('serializer', () => {
         .addInt32(-1)
         .addInt32(4)
         .add(Buffer.from('zing'))
-        .addInt16(0)
+        .addInt16(1) // one result-format code
+        .addInt16(0) // text results
         .join(true, 'B')
       assert.deepEqual(actual, expectedBuffer)
     })
@@ -149,7 +151,8 @@ describe('serializer', () => {
       .addInt32(-1)
       .addInt32(-1)
       .addInt32(-1)
-      .addInt16(0)
+      .addInt16(1) // one result-format code
+      .addInt16(0) // text results
       .join(true, 'B')
     assert.deepEqual(actual, expectedBuffer)
   })
@@ -176,7 +179,8 @@ describe('serializer', () => {
       .addInt32(-1)
       .addInt32(4)
       .add(Buffer.from('zing', 'utf-8'))
-      .addInt16(0)
+      .addInt16(1) // one result-format code
+      .addInt16(0) // text results
       .join(true, 'B')
     assert.deepEqual(actual, expectedBuffer)
   })
