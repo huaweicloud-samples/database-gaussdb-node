@@ -1,6 +1,9 @@
 # Pin the image used by CI; its gaussdb executable requires OpenBLAS.
 FROM opengauss/opengauss@sha256:f4687b8fe4a49ce66fc1cce65d04938984c1e2878d11f9df57b4b618faf051f9
 USER root
-RUN yum install -y openblas && yum clean all
+RUN yum --disablerepo='*' --enablerepo=OS \
+    --setopt=OS.baseurl=https://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS/OS/x86_64/ \
+    --setopt=OS.metalink= install -y openblas-0.3.18-3.oe2203 \
+    && yum clean all
 RUN LD_LIBRARY_PATH=/usr/local/opengauss/lib:/scws/lib \
     /usr/local/opengauss/bin/gaussdb --version
