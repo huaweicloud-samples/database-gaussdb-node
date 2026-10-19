@@ -15,6 +15,21 @@ Non-blocking GaussDB client for Node.js.
 $ npm install gaussdb-node
 ```
 
+## Node.js 14 and 15 compatibility (0.2.3)
+
+Version 0.2.3 fixes GaussDB SHA256 authentication in the Node.js 14 legacy
+crypto implementation. Install the published package with:
+
+```sh
+npm install gaussdb-node@0.2.3
+```
+
+CI covers Node.js 14, 15, 16, 18, 20, 22, 23 and 24. Authentication defaults to
+2048 iterations for JDBC compatibility. For servers requiring the iteration
+count carried in their authentication challenge, set `sha256Iterations: 'server'`
+in the Client/Pool configuration; an explicit numeric count is also supported.
+
+
 ---
 
 ## :star: Documentation :star:

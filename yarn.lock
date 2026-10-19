@@ -3685,43 +3685,44 @@ gaussdb-cloudflare@^0.2.1, "gaussdb-cloudflare@file:F:\\code\\gaussdb-node\\pack
   version "0.2.1"
   resolved "file:packages/gaussdb-cloudflare"
 
-gaussdb-connection-string@^0.2.1, "gaussdb-connection-string@file:F:\\code\\gaussdb-node\\packages\\gaussdb-connection-string":
-  version "0.2.1"
+gaussdb-connection-string@^0.2.2, "gaussdb-connection-string@file:F:\\code\\gaussdb-node\\packages\\gaussdb-connection-string":
+  version "0.2.2"
   resolved "file:packages/gaussdb-connection-string"
 
-gaussdb-cursor@^0.2.2, "gaussdb-cursor@file:F:\\code\\gaussdb-node\\packages\\gaussdb-cursor":
-  version "0.2.2"
+gaussdb-cursor@^0.2.3, "gaussdb-cursor@file:F:\\code\\gaussdb-node\\packages\\gaussdb-cursor":
+  version "0.2.3"
   resolved "file:packages/gaussdb-cursor"
 
 "gaussdb-esm-test@file:F:\\code\\gaussdb-node\\packages\\gaussdb-esm-test":
   version "0.2.2"
   resolved "file:packages/gaussdb-esm-test"
 
-gaussdb-node@^0.2.2, gaussdb-node@>=0.2.0, "gaussdb-node@file:F:\\code\\gaussdb-node\\packages\\gaussdb-node":
-  version "0.2.2"
+gaussdb-node@^0.2.3, gaussdb-node@>=0.2.3, "gaussdb-node@file:F:\\code\\gaussdb-node\\packages\\gaussdb-node":
+  version "0.2.3"
   resolved "file:packages/gaussdb-node"
   dependencies:
-    gaussdb-connection-string "^0.2.1"
-    gaussdb-pool "^0.2.1"
-    gaussdb-protocol "^0.2.2"
+    gaussdb-connection-string "^0.2.2"
+    gaussdb-pool "^0.2.2"
+    gaussdb-protocol "^0.2.3"
     pg-types "2.2.0"
     pgpass "1.0.5"
+    postgres-array "2.0.0"
   optionalDependencies:
     gaussdb-cloudflare "^0.2.1"
 
-gaussdb-pool@^0.2.1, "gaussdb-pool@file:F:\\code\\gaussdb-node\\packages\\gaussdb-pool":
-  version "0.2.1"
+gaussdb-pool@^0.2.2, "gaussdb-pool@file:F:\\code\\gaussdb-node\\packages\\gaussdb-pool":
+  version "0.2.2"
   resolved "file:packages/gaussdb-pool"
 
-gaussdb-protocol@^0.2.2, "gaussdb-protocol@file:F:\\code\\gaussdb-node\\packages\\gaussdb-protocol":
-  version "0.2.2"
+gaussdb-protocol@^0.2.3, "gaussdb-protocol@file:F:\\code\\gaussdb-node\\packages\\gaussdb-protocol":
+  version "0.2.3"
   resolved "file:packages/gaussdb-protocol"
 
-gaussdb-query-stream@^0.2.2, "gaussdb-query-stream@file:F:\\code\\gaussdb-node\\packages\\gaussdb-query-stream":
-  version "0.2.2"
+gaussdb-query-stream@^0.2.3, "gaussdb-query-stream@file:F:\\code\\gaussdb-node\\packages\\gaussdb-query-stream":
+  version "0.2.3"
   resolved "file:packages/gaussdb-query-stream"
   dependencies:
-    gaussdb-cursor "^0.2.2"
+    gaussdb-cursor "^0.2.3"
 
 genfun@^5.0.0:
   version "5.0.0"
@@ -6243,7 +6244,7 @@ postcss@^8.5.3:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-postgres-array@~2.0.0:
+postgres-array@2.0.0, postgres-array@~2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/postgres-array/-/postgres-array-2.0.0.tgz"
   integrity sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==

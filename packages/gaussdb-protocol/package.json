@@ -1,6 +1,6 @@
 {
   "name": "gaussdb-protocol",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "The GaussDB client/server binary protocol, implemented in TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

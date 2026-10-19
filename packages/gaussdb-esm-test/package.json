@@ -14,11 +14,11 @@
   ],
   "devDependencies": {
     "gaussdb-cloudflare": "^0.2.1",
-    "gaussdb-cursor": "^0.2.2",
-    "gaussdb-node": "^0.2.2",
-    "gaussdb-pool": "^0.2.1",
-    "gaussdb-protocol": "^0.2.2",
-    "gaussdb-query-stream": "^0.2.2"
+    "gaussdb-cursor": "^0.2.3",
+    "gaussdb-node": "^0.2.3",
+    "gaussdb-pool": "^0.2.2",
+    "gaussdb-protocol": "^0.2.3",
+    "gaussdb-query-stream": "^0.2.3"
   },
   "author": "Brian M. Carlson <brian.m.carlson@gmail.com>",
   "license": "MIT"

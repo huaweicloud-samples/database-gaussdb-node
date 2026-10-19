@@ -1,6 +1,6 @@
 {
   "name": "gaussdb-connection-string",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Functions for dealing with a GaussDB connection string",
   "main": "./index.js",
   "types": "./index.d.ts",

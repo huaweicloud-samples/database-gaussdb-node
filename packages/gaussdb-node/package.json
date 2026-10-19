@@ -1,6 +1,6 @@
 {
   "name": "gaussdb-node",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "GaussDB client - pure javascript implementation",
   "keywords": [
     "database",
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:HuaweiCloudDeveloper/gaussdb-node.git",
-    "directory": "packages/gaussdb"
+    "directory": "packages/gaussdb-node"
   },
   "author": "Brian Carlson <brian.m.carlson@gmail.com>",
   "main": "./lib",
@@ -28,11 +28,12 @@
     }
   },
   "dependencies": {
-    "gaussdb-connection-string": "^0.2.1",
-    "gaussdb-pool": "^0.2.1",
-    "gaussdb-protocol": "^0.2.2",
+    "gaussdb-connection-string": "^0.2.2",
+    "gaussdb-pool": "^0.2.2",
+    "gaussdb-protocol": "^0.2.3",
     "pg-types": "2.2.0",
-    "pgpass": "1.0.5"
+    "pgpass": "1.0.5",
+    "postgres-array": "2.0.0"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.23",
