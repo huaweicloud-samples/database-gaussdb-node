@@ -45,10 +45,6 @@ checked on every major version from 14 through 26; this does not constitute
 full database integration testing on the additional versions.
 
 
-```
-npm install gaussdb-node@npm:gaussdb-nodejs@0.2.3
-```
-
 ## Documentation
 
 Each package in this repo should have its own readme more focused on how to develop/contribute. 

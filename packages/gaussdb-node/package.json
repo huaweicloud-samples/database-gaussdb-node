@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/huaweicloud-samples/database-gaussdb-node.git",
-    "directory": "packages/gaussdb"
+    "directory": "packages/gaussdb-node"
   },
   "author": "Brian Carlson <brian.m.carlson@gmail.com>",
   "main": "./lib",

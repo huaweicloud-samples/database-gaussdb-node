@@ -41,10 +41,6 @@ checked on every major version from 14 through 26; this does not constitute
 full database integration testing on the additional versions.
 
 
-```sh
-$ npm install gaussdb-node@npm:gaussdb-nodejs@0.2.3
-```
-
 ---
 
 ## :star: Documentation :star:
