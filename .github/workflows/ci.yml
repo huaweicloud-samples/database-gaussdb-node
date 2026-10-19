@@ -67,7 +67,7 @@ jobs:
         run: |
           docker run -d --name gaussdb-node-ci -p 5432:5432 \
             -e GS_USERNAME=ci_user -e GS_PASSWORD=openGauss@123 \
-            -e GS_USER_PASSWORD=openGauss@123 -e GS_DB=ci_db_test \
+            -e GS_USER_PASSWORD=openGauss@123 -e GS_DB=postgres \
             -e GS_HOST_AUTH_METHOD=md5 gaussdb-node-ci:openblas
       - name: Wait for GaussDB to be ready
         run: bash .github/ci/wait-for-db.sh gaussdb-node-ci

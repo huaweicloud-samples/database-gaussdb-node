@@ -9,6 +9,9 @@ checks the database executable during the image build.
 The wait script requires a named container and an authenticated TCP query. It
 fails immediately if the container exits, preserving the initialization logs.
 It does not accept the temporary Unix-socket server used during initialization.
+The initialization SQL creates the test database explicitly in PG compatibility
+mode because inherited node-postgres tests require empty strings to stay empty
+strings rather than becoming NULL in the image's default A mode.
 The configuration script creates a SHA256 test user and configures logical
 replication before restarting and checking readiness again.
 
@@ -16,7 +19,7 @@ replication before restarting and checking readiness again.
 docker build -f .github/ci/Dockerfile.opengauss -t gaussdb-node-ci:openblas .github/ci
 docker run -d --name gaussdb-node-ci -p 127.0.0.1:55480:5432 \
   -e GS_USERNAME=ci_user -e GS_PASSWORD=openGauss@123 \
-  -e GS_USER_PASSWORD=openGauss@123 -e GS_DB=ci_db_test \
+  -e GS_USER_PASSWORD=openGauss@123 -e GS_DB=postgres \
   -e GS_HOST_AUTH_METHOD=md5 gaussdb-node-ci:openblas
 bash .github/ci/wait-for-db.sh gaussdb-node-ci
 bash .github/ci/configure-db.sh gaussdb-node-ci

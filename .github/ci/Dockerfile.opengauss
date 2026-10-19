@@ -7,3 +7,5 @@ RUN yum --disablerepo='*' --enablerepo=OS \
     && yum clean all
 RUN LD_LIBRARY_PATH=/usr/local/opengauss/lib:/scws/lib \
     /usr/local/opengauss/bin/gaussdb --version
+
+COPY 10-test-database.sql /docker-entrypoint-initdb.d/10-test-database.sql
