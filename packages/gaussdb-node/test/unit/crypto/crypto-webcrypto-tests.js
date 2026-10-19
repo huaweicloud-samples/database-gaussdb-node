@@ -3,6 +3,12 @@ const helper = require('../test-helper')
 const assert = require('assert')
 const suite = new helper.Suite()
 
+// Node.js 14 uses utils-legacy; WebCrypto is available starting with Node.js 15.
+if (!require('crypto').webcrypto) {
+  console.log('Skipping WebCrypto-only tests: runtime uses legacy crypto')
+  return
+}
+
 // 测试WebCrypto实现的加密功能
 suite.testAsync('webcrypto implementation tests', async () => {
   // 直接测试webcrypto实现
@@ -85,8 +91,9 @@ suite.testAsync('webcrypto deriveKey function', async () => {
   const iterations = 1000
 
   const key = await crypto.deriveKey(password, salt, iterations)
-  assert(key instanceof ArrayBuffer)
+  assert(key instanceof ArrayBuffer || Buffer.isBuffer(key))
   assert.strictEqual(key.byteLength, 32) // Should be 32 bytes for SHA-256
+  assert.deepStrictEqual(Buffer.from(key), require('crypto').pbkdf2Sync(password, salt, iterations, 32, 'sha256'))
 })
 
 suite.testAsync('webcrypto edge cases', async () => {

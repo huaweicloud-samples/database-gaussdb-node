@@ -12,10 +12,10 @@ const assert = require('assert')
  *
  * SQL to create test role:
  *
- *     SET password_encryption_type = 2;
+ *     gs_guc reload -D "$PGDATA" -c "password_encryption_type = 2"
  *     CREATE ROLE sha256_test login password 'test4@scram';
  *
- * Add the following entries to gs_hba.conf:
+ * Add the following entries to pg_hba.conf:
  *
  *     host   all   sha256_test   ::1/128    sha256
  *     host   all   sha256_test   0.0.0.0/0   sha256
@@ -40,50 +40,42 @@ if (!config.user || !config.password) {
   return
 }
 
+// Authentication failures can reject before the socket is closed. Always end
+// the client so the test process can exit after checking the expected error.
+async function withClient(options, test) {
+  const client = new gaussdb.Client(options)
+  try {
+    await test(client)
+  } finally {
+    await client.end()
+  }
+}
+
 suite.testAsync('can connect using sha256 password authentication', async () => {
-  const client = new gaussdb.Client(config)
-  let usingSha256 = false
-  client.connection.once('authenticationSHA256Password', () => {
-    usingSha256 = true
+  await withClient(config, async (client) => {
+    let usingSha256 = false
+    client.connection.once('authenticationSHA256Password', () => {
+      usingSha256 = true
+    })
+    await client.connect()
+    assert.strictEqual(usingSha256, true, 'Should use SHA256 authentication')
+    const { rows } = await client.query('SELECT NOW()')
+    assert.strictEqual(rows.length, 1)
   })
-  await client.connect()
-
-  // Verify SHA256 authentication was used
-  assert.strictEqual(usingSha256, true, 'Should use SHA256 authentication')
-
-  // Test basic query execution
-  const { rows } = await client.query('SELECT NOW()')
-  assert.strictEqual(rows.length, 1)
-
-  await client.end()
 })
 
 suite.testAsync('sha256 authentication fails when password is wrong', async () => {
-  const client = new gaussdb.Client({
-    ...config,
-    password: config.password + 'append-something-to-make-it-bad',
+  await withClient({ ...config, password: config.password + 'append-something-to-make-it-bad' }, async (client) => {
+    await assert.rejects(() => client.connect(), { code: '28P01' }, 'Error code should be for a password error')
   })
-  await assert.rejects(
-    () => client.connect(),
-    {
-      code: '28P01',
-    },
-    'Error code should be for a password error'
-  )
 })
 
 suite.testAsync('sha256 authentication fails when password is empty', async () => {
-  const client = new gaussdb.Client({
-    ...config,
-    // use a password function to simulate empty password
-    password: () => '',
+  await withClient({ ...config, password: () => '' }, async (client) => {
+    await assert.rejects(
+      () => client.connect(),
+      (err) => err.code === '28P01' || err.message.includes('password'),
+      'Should fail with password-related error'
+    )
   })
-  await assert.rejects(
-    () => client.connect(),
-    (err) => {
-      // Should fail with authentication error
-      return err.code === '28P01' || err.message.includes('password')
-    },
-    'Should fail with password-related error'
-  )
 })

@@ -39,8 +39,8 @@ class QueryStream extends Readable implements Submittable {
     // gaussdb client sets types via _result property
     this._result = this.cursor._result
 
-    this.cursor.on('error', (err: Error) => this.emit('error', err))
-    this.cursor.on('end', (result: any) => this.emit('end', result))
+    // Readable owns end/error emission; forwarding cursor events duplicates them.
+    this.cursor.on('error', (err: Error) => this.destroy(err))
   }
 
   public submit(connection: Connection): void {
