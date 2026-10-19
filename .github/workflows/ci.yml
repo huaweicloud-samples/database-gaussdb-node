@@ -23,24 +23,12 @@ jobs:
   build:
     timeout-minutes: 15
     needs: lint
-    services:
-      gaussdb:
-        image: opengauss/opengauss
-        env:
-          GS_USERNAME: ci_user
-          GS_PASSWORD: openGauss@123
-          GS_USER_PASSWORD: openGauss@123
-          POSTGRES_HOST_AUTH_METHOD: 'trust'
-          POSTGRES_INITDB_ARGS: "--auth-local=md5"
-          GS_DB: ci_db_test
-          DB_TYPE: opengauss
-        ports:
-          - 5432:5432
-        # options: --health-cmd "su - omm -c \"gs_ctl status\"" --health-interval 10s --health-timeout 5s --health-retries 5
     strategy:
       fail-fast: false
       matrix:
         node:
+          - '14'
+          - '15'
           - '16'
           - '18'
           - '20'
@@ -62,87 +50,40 @@ jobs:
       DB_TYPE: opengauss
       LOGICAL_REPLICATION_TEST: '1'
     steps:
-      - name: Show OS
-        run: |
-          uname -a
-      - name: Wait for GaussDB to be ready
-        run: |
-          # Using gs_ctl status (native OpenGauss check) instead of pg_isready
-          CONTAINER_ID=$(docker ps --filter "ancestor=opengauss/opengauss" --format "{{.ID}}")
-          timeout 60 bash -c "until docker exec $CONTAINER_ID su - omm -c 'gs_ctl status -D /var/lib/opengauss/data' > /dev/null 2>&1; do echo -n '.'; sleep 2; done" || {
-            echo "Timeout waiting for GaussDB to start"
-            docker logs $CONTAINER_ID
-            exit 1
-          }
-      - name: Setup SHA256 authentication
-        run: |
-          # Wait for database to be fully started
-          sleep 15
-          
-          # Get container ID
-          CONTAINER_ID=$(docker ps --filter "ancestor=opengauss/opengauss" --format "{{.ID}}")
-          docker exec $CONTAINER_ID su - omm -c "gs_guc set -D /var/lib/opengauss/data/ -c 'password_encryption_type = 2'"
-          
-          # Add SHA256 authentication rule to gs_hba.conf
-          docker exec $CONTAINER_ID su - omm -c "gs_guc set -D /var/lib/opengauss/data/ -h 'host all sha256_test 0.0.0.0/0 sha256'"
-          docker exec $CONTAINER_ID su - omm -c "gs_ctl reload -D /var/lib/opengauss/data/"
-          sleep 5
-          
-          PGPASSWORD=openGauss@123 psql -h localhost -U ci_user -d ci_db_test -c "CREATE ROLE sha256_test login password 'test4@scram';"
-      - name: Setup logical replication
-        if: env.LOGICAL_REPLICATION_TEST == '1'
-        run: |
-          # Get container ID
-          CONTAINER_ID=$(docker ps --filter "ancestor=opengauss/opengauss" --format "{{.ID}}")
-
-          # Set wal_level to logical
-          docker exec $CONTAINER_ID su - omm -c "gs_guc set -D /var/lib/opengauss/data/ -c 'wal_level = logical'"
-
-          # Set max_replication_slots
-          docker exec $CONTAINER_ID su - omm -c "gs_guc set -D /var/lib/opengauss/data/ -c 'max_replication_slots = 10'"
-
-          # Set max_wal_senders
-          docker exec $CONTAINER_ID su - omm -c "gs_guc set -D /var/lib/opengauss/data/ -c 'max_wal_senders = 10'"
-
-          # Add replication connection rule to pg_hba.conf
-          docker exec $CONTAINER_ID su - omm -c "gs_guc set -D /var/lib/opengauss/data/ -h 'host replication all 0.0.0.0/0 md5'"
-
-          # Restart container to apply logical replication settings
-          docker restart $CONTAINER_ID
-
-          # Wait for database to be ready again
-          sleep 10
-          timeout 60 bash -c "until docker exec $CONTAINER_ID su - omm -c 'gs_ctl status -D /var/lib/opengauss/data' > /dev/null 2>&1; do echo -n '.'; sleep 2; done" || {
-            echo "Timeout waiting for GaussDB to restart"
-            docker logs $CONTAINER_ID
-            exit 1
-          }
-
-          sleep 5
-
-          # Verify configuration
-          echo "Verifying logical replication configuration..."
-          WAL_LEVEL=$(docker exec $CONTAINER_ID su - omm -c "gsql -d ci_db_test -t -c \"SHOW wal_level;\"" | tr -d ' \n')
-          MAX_REPL_SLOTS=$(docker exec $CONTAINER_ID su - omm -c "gsql -d ci_db_test -t -c \"SHOW max_replication_slots;\"" | tr -d ' \n')
-          MAX_WAL_SENDERS=$(docker exec $CONTAINER_ID su - omm -c "gsql -d ci_db_test -t -c \"SHOW max_wal_senders;\"" | tr -d ' \n')
-
-          echo "  wal_level: ${WAL_LEVEL}"
-          echo "  max_replication_slots: ${MAX_REPL_SLOTS}"
-          echo "  max_wal_senders: ${MAX_WAL_SENDERS}"
-
-          if [ "$WAL_LEVEL" != "logical" ]; then
-            echo "Warning: wal_level is not set to 'logical'"
-            exit 1
-          fi
-
-          echo "Logical Replication Setup Complete!"
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Setup node
+      - name: Build database test image
+        run: docker build -f .github/ci/Dockerfile.opengauss -t gaussdb-node-ci:openblas .github/ci
+      - name: Start database
+        run: |
+          docker run -d --name gaussdb-node-ci -p 5432:5432 \
+            -e GS_USERNAME=ci_user -e GS_PASSWORD=openGauss@123 \
+            -e GS_USER_PASSWORD=openGauss@123 -e GS_DB=ci_db_test \
+            -e GS_HOST_AUTH_METHOD=md5 gaussdb-node-ci:openblas
+      - name: Wait for GaussDB to be ready
+        run: bash .github/ci/wait-for-db.sh gaussdb-node-ci
+      - name: Configure SHA256 authentication and logical replication
+        run: bash .github/ci/configure-db.sh gaussdb-node-ci
+      # Install/build with the toolchain's supported Node.js version. Older
+      # runtimes still execute the tests, without installing modern dev tools.
+      - name: Setup build Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - name: Setup test Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: yarn
-      - run: yarn install --frozen-lockfile
       - run: yarn test
+      - name: Database diagnostics
+        if: failure()
+        run: |
+          docker ps -a
+          docker logs gaussdb-node-ci || true
+      - name: Stop database
+        if: always()
+        run: docker rm -fv gaussdb-node-ci || true
