@@ -173,7 +173,7 @@ class Cursor extends EventEmitter {
     this._error = msg
     // satisfy any waiting callback
     if (this._cb) {
-      const cb = this._rowDescription
+      const cb = this._cb
       this._cb = null
       cb(msg)
     }
