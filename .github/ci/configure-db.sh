@@ -2,7 +2,14 @@
 set -euo pipefail
 container=${1:?container name or ID required}
 # This is a reload-only server parameter, not a session SET parameter.
-docker exec "$container" su - omm -c "gs_guc reload -D /var/lib/opengauss/data -c 'password_encryption_type = 2'"
+docker exec "$container" su - omm -c "gs_guc reload -D /var/lib/opengauss/data -c 'password_encryption_type = 2' -c 'auth_iteration_count = 2048'"
+# Verify the new backend sees the reloaded values before creating the role.
+for ((attempt=0; attempt<30; attempt++)); do
+  settings=$(docker exec "$container" su - omm -c 'gsql -d ci_db_test -t -A -c "SHOW password_encryption_type; SHOW auth_iteration_count;"')
+  [[ "$settings" == $'2\n2048' ]] && break
+  sleep 1
+done
+[[ "$settings" == $'2\n2048' ]] || { echo "Authentication settings did not reload: $settings" >&2; exit 1; }
 docker exec -i "$container" su - omm -c 'gsql -d ci_db_test -v ON_ERROR_STOP=1' <<'SQL'
 CREATE ROLE sha256_test LOGIN PASSWORD 'test4@scram';
 SQL

@@ -12,7 +12,8 @@ It does not accept the temporary Unix-socket server used during initialization.
 The initialization SQL creates the test database explicitly in PG compatibility
 mode because inherited node-postgres tests require empty strings to stay empty
 strings rather than becoming NULL in the image's default A mode.
-The configuration script creates a SHA256 test user and configures logical
+The configuration script sets auth_iteration_count=2048 to exercise the driver's
+default JDBC-compatible proof and creates a SHA256 test user and configures logical
 replication before restarting and checking readiness again.
 
 ```sh
