@@ -42,6 +42,50 @@ checked on every major version from 14 through 26; this does not constitute
 full database integration testing on the additional versions.
 
 
+## SHA256 认证迭代次数（0.2.3）
+
+`sha256Iterations` 控制客户端计算 SHA256 密码认证结果时使用的迭代次数。
+它不会修改数据库密码或服务端配置。
+
+| 配置 | 含义 |
+| --- | --- |
+| 不配置 | 当前 0.2.3 默认使用 **2048** 次 |
+| `sha256Iterations: 'server'` | 使用服务端在**本次登录认证报文**中下发的迭代次数 |
+| `sha256Iterations: 10000` | 显式使用指定次数；数字须为 1 到 10000000 之间的整数 |
+
+如果服务端要求 10000 次，而客户端使用默认 2048 次，即使账号密码正确，
+也可能收到 `Invalid username/password,login denied.`。
+本地 GaussDB 507 对照测试已复现这一情况：默认 2048 登录失败，
+使用 `'server'` 或显式 10000 后登录和查询成功。
+这不是所有认证失败的唯一原因，也不表示所有 GaussDB 实例都要求 10000 次。
+
+对于需要按服务端下发次数认证的实例，可以在 `Client` 或 `Pool` 的配置中加入：
+
+```js
+const { Client } = require('gaussdb-nodejs')
+
+const client = new Client({
+  host: process.env.GAUSSHOST,
+  port: Number(process.env.GAUSSPORT || 8000),
+  user: process.env.GAUSSUSER,
+  password: process.env.GAUSSPASSWORD,
+  database: process.env.GAUSSDATABASE,
+  sha256Iterations: 'server',
+})
+```
+
+通过 npm 别名安装的项目可以继续使用 `require('gaussdb-node')`，参数含义相同。
+
+这里的 `'server'` 是读取认证报文，不是执行 `SHOW auth_iteration_count` 查询配置。
+对于当前这类 **80 字节 SHA256 认证数据**，最后 **4 字节**是大端编码的迭代次数：
+例如调试日志 `AUTH ... hex=` 的末尾为 `00002710`，表示十进制 **10000**。
+驱动直接解析原始字节，不依赖日志文字。
+
+DBA 可以用 `SHOW auth_iteration_count;` 查看数据库当前配置，但不要仅凭配置值
+或报文值断定所有协议、历史账号的认证行为相同；应结合实际实例和连接结果验证。
+排查问题时，应先核对包版本、账号密码和连接目标，再比较默认配置与 `'server'` 的结果，
+无需为了适配客户端而直接修改数据库的迭代次数。
+
 ---
 
 ## :star: Documentation :star:
